@@ -39,22 +39,30 @@ public class JmsConsumer {
 		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
 		scheduler.scheduleAtFixedRate(() -> {
-			new Thread(new Runnable() {
 
-				@Override
-				public void run() {
-					List<Order> ord = new ArrayList<Order>();
-					ord = orders;
-					orders.removeAll(orders);
-					ord.forEach(item -> {
-						InvoiceMaker.generate(item);
-					});
-					logger.info("disparou ... (" + ord.size() + " pedidos)");
-				}
+			if (orders.size() > 0) {
 
-			}).start();
+				new Thread(new Runnable() {
 
-		}, 1, 2, TimeUnit.SECONDS);
+					@Override
+					public void run() {
+						//logger.info("ordens no momento: " + orders.size());
+						
+						List<Order> ord = new ArrayList<Order>(orders);
+						
+						orders.removeAll(orders);
+						
+						ord.forEach(item -> {
+							InvoiceMaker.generate(item);
+						});
+						
+						//logger.info("produzindo ... (" + ord.size() + " notas)");
+					}
+
+				}).start();
+			}
+
+		}, 1000, 1000, TimeUnit.MILLISECONDS);
 
 	}
 
@@ -63,12 +71,10 @@ public class JmsConsumer {
 
 			Order order = orderController.findOrderById(orderId);
 			orders.add(order);
-			// InvoiceMaker.generate(order);
 
 		} catch (Exception e) {
 
 			logger.error("ERROR: " + e.getMessage());
-			e.printStackTrace();
 
 		}
 	}
@@ -102,26 +108,31 @@ public class JmsConsumer {
 	@JmsListener(destination = "fila1", containerFactory = "jsaFactory")
 	private void receive(String msg) throws Exception {
 		execute(msg);
+		Thread.sleep(10);
 	}
 
 	@JmsListener(destination = "fila2", containerFactory = "jsaFactory")
 	private void receive2(String msg) throws Exception {
 		execute(msg);
+		Thread.sleep(10);
 	}
 
 	@JmsListener(destination = "fila3", containerFactory = "jsaFactory")
 	private void receive3(String msg) throws Exception {
 		execute(msg);
+		Thread.sleep(10);
 	}
 
 	@JmsListener(destination = "fila4", containerFactory = "jsaFactory")
 	private void receive4(String msg) throws Exception {
 		execute(msg);
+		Thread.sleep(10);
 	}
 
 	@JmsListener(destination = "fila5", containerFactory = "jsaFactory")
 	private void receive5(String msg) throws Exception {
 		execute(msg);
+		Thread.sleep(10);
 	}
 
 }

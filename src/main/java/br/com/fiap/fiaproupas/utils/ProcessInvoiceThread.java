@@ -19,7 +19,7 @@ public class ProcessInvoiceThread extends Thread {
 	
 	@Override
 	public void run() {
-		logger.info("Starting producing block of invoices (" + orders.size() + " in total)...");
+		//logger.info("Starting producing block of invoices (" + orders.size() + " in total)...");
 		orders.forEach(item->{
 			InvoiceMaker.generate(item);
 		});

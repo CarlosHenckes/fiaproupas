@@ -34,7 +34,7 @@ public class OrderService {
 	@Cacheable(value = "orderFindCache")
 	public Order findOrderById(long id) throws Exception {
 		Order order = em.find(Order.class, id);
-		logger.info("-- retriving data from db.");
+		//logger.info("-- retriving data from db.");
 		if (order == null)
 			throw new OrderNotFoundException("this order does not exist.");
 		return order;
