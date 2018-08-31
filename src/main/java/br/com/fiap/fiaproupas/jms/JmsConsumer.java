@@ -82,8 +82,8 @@ public class JmsConsumer {
 	private void makeMonth(int year, int month) {
 
 		YearMonth yearMonth = YearMonth.of(year, month);
-		orders = orderController.listOrdersByMonthAndYear(yearMonth);
-		List<List<Order>> chunks = Lists.partition(orders, BLOCK_CHUNK);
+		List<Order> monthOrders = orderController.listOrdersByMonthAndYear(yearMonth);
+		List<List<Order>> chunks = Lists.partition(monthOrders, BLOCK_CHUNK);
 
 		chunks.forEach(chunk -> {
 			new ProcessInvoiceThread(chunk).start();
